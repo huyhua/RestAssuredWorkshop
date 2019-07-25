@@ -1,12 +1,14 @@
 package com.nvg.test
 
+import model.SearchResults
 import com.nvg.utils.When
 import com.nvg.utils.loadFile
+import com.nvg.utils.to
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.*
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
 class SampleTest: TestBase() {
@@ -46,6 +48,20 @@ class SampleTest: TestBase() {
     }
 
     @Test
+    fun `Deserialize successful`() {
+        val jsonObj = given().baseUri("https://xbapi-stage.anibis.ch/v1")
+            .port(8080)
+            .header("accept", "application/json")
+            .header("Content-Type", "application/json")
+            .body(String.format("{\"SearchText\":\"%s\",\"ResultRows\":%s,\"ResultStart\":%s}", "QA Test", 25, 0))
+            .When()
+            .post("/Search")
+            .then().extract().to<SearchResults>()
+
+        assertThat(jsonObj.ObjectIds, not(emptyList()))
+    }
+
+    @Test
     fun `test exception is thrown when wrong thing happened`() {
         exception.expect(AssertionError::class.java)
         exception.expectMessage(containsString("Expected content-type \"XML\" doesn't match actual content-type \"application/json; charset=utf-8\"."))
@@ -59,7 +75,7 @@ class SampleTest: TestBase() {
     }
 
     @Test
-    fun `authorization failed`() {
+    fun `Authorization failed`() {
         given().baseUri("https://api.immoscout24.ch/v1")
             .port(8080)
             .headers(is24Headers)
@@ -72,7 +88,7 @@ class SampleTest: TestBase() {
     }
 
     @Test
-    fun `authorization passed`() {
+    fun `Authorization passed`() {
         given().baseUri("https://api.immoscout24.ch/v1")
             .port(8080)
             .headers(is24Headers)

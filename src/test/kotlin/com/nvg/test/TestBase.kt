@@ -11,8 +11,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.ExpectedException
 
-
-
 abstract class TestBase {
     @Rule
     @JvmField
@@ -34,7 +32,7 @@ abstract class TestBase {
         IS24Auth().run {
             Headers(
                 Header("X-Request-Date", this.date),
-                Header("X-Udid", this.UDID),
+                Header("X-Udid", this.udid),
                 Header("X-Token", this.token),
                 Header("X-IS24-Api-Key", this.apiKey)
             )

@@ -10,12 +10,12 @@ class IS24Auth {
         .also { it.timeZone = TimeZone.getTimeZone("GMT") }
     private val secret = "jdai4*c52kl"
 
-    val date = dateFormatter.format(Date())
-    val UDID = "6AE67C79-DA46-4309-BCAB-DA6B7933A969"
+    val date: String = dateFormatter.format(Date())
+    val udid = "6AE67C79-DA46-4309-BCAB-DA6B7933A969"
     val apiKey = "6a81c2d9-743d-2a1c-62bf-2545382fe7e1"
 
-    val token by lazy {
-        val data = "$UDID-$apiKey-$secret"
+    val token: String by lazy {
+        val data = "$udid-$apiKey-$secret"
         val mac = Mac.getInstance("HmacMD5")
         mac.init(SecretKeySpec(date.toByteArray(), "HmacMD5"))
         mac.update(data.toByteArray())
