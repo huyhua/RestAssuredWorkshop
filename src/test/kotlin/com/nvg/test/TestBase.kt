@@ -1,4 +1,4 @@
-package com.nvg
+package com.nvg.test
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import com.github.tomakehurst.wiremock.junit.WireMockRule

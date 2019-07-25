@@ -1,0 +1,1 @@
+{"$schema":"http://json-schema.org/draft-04/schema#","type":"object","properties":{"TotalCount":{"type":"integer"},"ResultRows":{"type":"integer"},"ResultStart":{"type":"integer"},"ObjectIds":{"type":"array","items":{"type":"integer"},"additionalItems":false}},"required":["TotalCount","ResultRows","ResultStart","ObjectIds"]}
