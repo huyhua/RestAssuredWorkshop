@@ -43,22 +43,21 @@ class SampleTest: TestBase() {
                 .post("/Search")
             .then()
                 .statusCode(200)
-                .assertThat()
-                    .body(matchesJsonSchema(loadFile("schemas/search.json")))
+                .body(matchesJsonSchema(loadFile("schemas/search.json")))
     }
 
     @Test
     fun `Deserialize successful`() {
-        val jsonObj = given().baseUri("https://xbapi-stage.anibis.ch/v1")
+        given().baseUri("https://xbapi-stage.anibis.ch/v1")
             .port(8080)
             .header("accept", "application/json")
             .header("Content-Type", "application/json")
             .body(String.format("{\"SearchText\":\"%s\",\"ResultRows\":%s,\"ResultStart\":%s}", "QA Test", 25, 0))
             .When()
-            .post("/Search")
-            .then().extract().to<SearchResults>()
-
-        assertThat(jsonObj.ObjectIds, not(emptyList()))
+                .post("/Search")
+            .then()
+                .extract().to<SearchResults>()
+                .apply { assertThat(this.ObjectIds, not(emptyList())) }
     }
 
     @Test
@@ -69,9 +68,9 @@ class SampleTest: TestBase() {
         given().baseUri("https://api-stage.anibis.ch/v1")
             .port(8080)
             .When()
-            .get("/fr/categories")
+                .get("/fr/categories")
             .then()
-            .contentType(ContentType.XML)
+                .contentType(ContentType.XML)
     }
 
     @Test
