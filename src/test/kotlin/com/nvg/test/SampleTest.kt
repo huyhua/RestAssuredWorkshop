@@ -1,6 +1,6 @@
 package com.nvg.test
 
-import model.SearchResults
+import com.nvg.model.SearchResults
 import com.nvg.utils.When
 import com.nvg.utils.loadFile
 import com.nvg.utils.to

@@ -1,4 +1,4 @@
-package model
+package com.nvg.model
 
 data class SearchResults (
     var TotalCount: Int,
