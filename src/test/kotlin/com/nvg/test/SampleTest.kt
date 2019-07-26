@@ -99,4 +99,15 @@ class SampleTest: TestBase() {
             .then()
                 .statusCode(200)
     }
+
+    @Test
+    fun `Return khoivo relationships`() {
+        given()
+            .When()
+                .get("/khoivo")
+            .then()
+                .statusCode(200)
+            .and()
+                .assertThat().body(matchesJsonSchema(loadFile("schemas/khoivo.json")))
+    }
 }

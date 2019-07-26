@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/khoivo"
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "status": 200,
+    "jsonBody": {"students":[{"id":123456,"name":"Khoi Vo","class":[1,3,5,7],"DOB":"28-01-1986","email":"khoivo@gmail.com","relationships":[{"id":3456,"name":"Chi","type":1},{"id":3457,"name":"Phuong","type":2}]},{"id":123457,"name":"Hai Dao","class":[1,3,5],"DOB":"28-01-1986","email":"haidao@gmail.com","relationships":[{"id":3456,"name":"Chi","type":1},{"id":3457,"name":"Phuong","type":2}]}]}
+  }
+}
