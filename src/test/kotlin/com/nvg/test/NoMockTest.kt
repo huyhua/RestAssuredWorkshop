@@ -4,19 +4,22 @@ import com.nvg.model.SearchResults
 import com.nvg.utils.When
 import com.nvg.utils.loadFile
 import com.nvg.utils.to
-import io.restassured.RestAssured
+import io.restassured.RestAssured.*
 import io.restassured.builder.RequestSpecBuilder
+import io.restassured.http.ContentType
 import io.restassured.module.jsv.JsonSchemaValidator
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.lang.AssertionError
 
 class NoMockTest: TestBase() {
 
     @BeforeEach
     fun setup() {
-        RestAssured.requestSpecification = RequestSpecBuilder()
+        requestSpecification = RequestSpecBuilder()
             .setBaseUri("https://xbapi-stage.anibis.ch/v1")
             .setPort(8080)
             .build()
@@ -24,20 +27,21 @@ class NoMockTest: TestBase() {
 
     @Test
     fun `Same test but with real api`() {
-        RestAssured.given().baseUri("https://api-stage.anibis.ch/v1")
-            .When()
+        given()
+            .baseUri("https://api-stage.anibis.ch/v1")
+        .When()
             .get("/fr/categories")
-            .then()
+        .then()
             .body("name", CoreMatchers.`is`("Toutes les rubriques"))
     }
 
     @Test
     fun `Post request to a useless endpoint`() {
-        RestAssured.given()
+        given()
             .header("accept", "application/json")
             .header("Content-Type", "application/json")
             .body(String.format("{\"SearchText\":\"%s\",\"ResultRows\":%s,\"ResultStart\":%s}", "QA Test", 25, 0))
-            .When()
+        .When()
             .post("/Search")
             .then()
             .statusCode(200)
@@ -46,40 +50,53 @@ class NoMockTest: TestBase() {
 
     @Test
     fun `Deserialize successful`() {
-        RestAssured.given()
+        given()
             .header("accept", "application/json")
             .header("Content-Type", "application/json")
             .body(String.format("{\"SearchText\":\"%s\",\"ResultRows\":%s,\"ResultStart\":%s}", "QA Test", 25, 0))
-            .When()
+        .When()
             .post("/Search")
-            .then()
+        .then()
             .extract().to<SearchResults>()
             .apply { MatcherAssert.assertThat(this.ObjectIds, CoreMatchers.not(emptyList())) }
     }
 
     @Test
     fun `Authorization failed`() {
-        RestAssured.given().baseUri("https://api.immoscout24.ch/v1")
-            .port(8080)
+        given()
+            .baseUri("https://api.immoscout24.ch/v1")
             .headers(is24Headers)
             .header("Accept-Language", "en")
             .auth().basic("huyhua@nvg.vn", "1233") // Wrong password
-            .When()
+        .When()
             .get("/private/users/login")
-            .then()
+        .then()
             .statusCode(401)
     }
 
     @Test
     fun `Authorization passed`() {
-        RestAssured.given().baseUri("https://api.immoscout24.ch/v1")
-            .port(8080)
+        given()
+            .baseUri("https://api.immoscout24.ch/v1")
             .headers(is24Headers)
             .header("Accept-Language", "en")
             .auth().basic("huyhua@nvg.vn", "123456")
-            .When()
+        .When()
             .get("/private/users/login")
-            .then()
+        .then()
             .statusCode(200)
+    }
+
+    @Test
+    fun `test exception is thrown when wrong thing happened`() {
+        assertThrows<AssertionError> {
+            given()
+                .baseUri("https://api-stage.anibis.ch/v1")
+                .port(8080)
+            .When()
+                .get("/fr/categories")
+            .then()
+                .contentType(ContentType.XML)
+        }
     }
 }

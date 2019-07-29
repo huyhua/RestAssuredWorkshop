@@ -8,7 +8,6 @@ import org.junit.jupiter.api.parallel.ExecutionMode
 
 @Execution(ExecutionMode.CONCURRENT)
 abstract class TestBase {
-
     protected val is24Headers by lazy {
         IS24Auth().run {
             Headers(
