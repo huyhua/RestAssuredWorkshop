@@ -18,6 +18,7 @@
         <junit.platform.version>1.5.1</junit.platform.version>
         <restAssured.version>4.0.0</restAssured.version>
         <wiremock.version>2.24.0</wiremock.version>
+        <jackson.kotlin.version>2.9.4</jackson.kotlin.version>
     </properties>
 
     <dependencies>
@@ -58,7 +59,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
-            <version>2.9.4</version>
+            <version>${jackson.kotlin.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -67,7 +68,6 @@
             <version>${wiremock.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
