@@ -1,32 +1,13 @@
 package com.nvg.test
 
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
-import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.nvg.utils.IS24Auth
-import io.restassured.RestAssured
-import io.restassured.builder.RequestSpecBuilder
 import io.restassured.http.Header
 import io.restassured.http.Headers
-import org.junit.Before
-import org.junit.Rule
-import org.junit.rules.ExpectedException
+import org.junit.jupiter.api.parallel.Execution
+import org.junit.jupiter.api.parallel.ExecutionMode
 
+@Execution(ExecutionMode.CONCURRENT)
 abstract class TestBase {
-    @Rule
-    @JvmField
-    val wireMockRule = WireMockRule(options().dynamicPort())
-
-    @Rule
-    @JvmField
-    var exception: ExpectedException = ExpectedException.none()
-
-    @Before
-    fun setup() {
-        RestAssured.requestSpecification = RequestSpecBuilder()
-            .setBaseUri(wireMockRule.baseUrl())
-            .setPort(wireMockRule.port())
-            .build()
-    }
 
     protected val is24Headers by lazy {
         IS24Auth().run {
