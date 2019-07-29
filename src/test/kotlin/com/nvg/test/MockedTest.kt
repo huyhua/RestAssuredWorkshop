@@ -7,24 +7,20 @@ import io.restassured.RestAssured
 import io.restassured.RestAssured.given
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchema
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.`is`
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import ru.lanwen.wiremock.ext.WiremockResolver
-import ru.lanwen.wiremock.ext.WiremockResolver.*
-import ru.lanwen.wiremock.ext.WiremockUriResolver
-import ru.lanwen.wiremock.ext.WiremockUriResolver.*
+import ru.lanwen.wiremock.ext.WiremockResolver.Wiremock
 
-@ExtendWith(
-    WiremockResolver::class,
-    WiremockUriResolver::class
-)
+@ExtendWith(WiremockResolver::class)
 class MockedTest: TestBase() {
     @BeforeEach
-    fun setup(@Wiremock wiremock: WireMockServer, @WiremockUri uri: String) {
+    fun setup(@Wiremock wireMock: WireMockServer) {
         RestAssured.requestSpecification = RequestSpecBuilder()
-            .setBaseUri(uri)
+            .setBaseUri(wireMock.baseUrl())
+            .setPort(wireMock.port())
             .build()
     }
 

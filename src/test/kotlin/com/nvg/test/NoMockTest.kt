@@ -1,12 +1,16 @@
 package com.nvg.test
 
 import com.nvg.model.SearchResults
+import com.nvg.utils.IS24Auth
 import com.nvg.utils.When
 import com.nvg.utils.loadFile
 import com.nvg.utils.to
-import io.restassured.RestAssured.*
+import io.restassured.RestAssured
+import io.restassured.RestAssured.given
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.http.ContentType
+import io.restassured.http.Header
+import io.restassured.http.Headers
 import io.restassured.module.jsv.JsonSchemaValidator
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -19,7 +23,7 @@ class NoMockTest: TestBase() {
 
     @BeforeEach
     fun setup() {
-        requestSpecification = RequestSpecBuilder()
+        RestAssured.requestSpecification = RequestSpecBuilder()
             .setBaseUri("https://xbapi-stage.anibis.ch/v1")
             .setPort(8080)
             .build()
@@ -97,6 +101,17 @@ class NoMockTest: TestBase() {
                 .get("/fr/categories")
             .then()
                 .contentType(ContentType.XML)
+        }
+    }
+
+    private val is24Headers by lazy {
+        IS24Auth().run {
+            Headers(
+                Header("X-Request-Date", this.date),
+                Header("X-Udid", this.udid),
+                Header("X-Token", this.token),
+                Header("X-IS24-Api-Key", this.apiKey)
+            )
         }
     }
 }
